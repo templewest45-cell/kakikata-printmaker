@@ -1,0 +1,434 @@
+:root {
+    --primary-bg: #f9f9f9;
+    --paper-bg: #fff;
+    --grid-line-color: #5d9e60; /* Darkened from #8FCC90 to drastically improve dash visibility */
+    --text-color: #333;
+    --trace-color1: #a0c4ff;
+    --trace-color2: #e1b382;
+    --trace-color3: #c2c2c2;
+    --grid-size: 70px; 
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--primary-bg);
+    font-family: 'UD デジタル 教科書体 NK-B', 'UD Digi Kyokasho NK-B', 'UDDigiKyokashoN-B', 'Klee One', 'Yu Gothic', sans-serif;
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+/* Control Panel */
+#control-panel {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    width: 320px;
+    margin-right: 30px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 20px;
+}
+
+.app-title {
+    font-size: 22px;
+    text-align: center;
+    color: #fff;
+    background: linear-gradient(135deg, #FF9800, #FF5722);
+    padding: 12px 10px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    line-height: 1.4;
+    letter-spacing: 2px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+#control-panel h2 {
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: #4CAF50;
+}
+
+#control-panel h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.control-group {
+    margin-bottom: 15px;
+}
+
+.control-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.control-group input[type="text"],
+.control-group input[type="number"],
+.control-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 20px 0;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    width: 100%;
+    margin-top: 5px;
+    transition: background 0.2s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.camera-btn {
+    background-color: #2196F3;
+}
+.camera-btn:hover { background-color: #1976D2; }
+
+#print-btn {
+    margin-top: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 15px;
+    background-color: #FF5722;
+}
+#print-btn:hover { background-color: #E64A19; }
+
+#pdf-btn {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 15px;
+    background-color: #1976D2;
+}
+#pdf-btn:hover { background-color: #1565C0; }
+
+/* A4 Page Setup */
+.page.a4 {
+    width: 210mm;
+    height: 297mm;
+    background: var(--paper-bg);
+    box-shadow: 0 0 15px rgba(0,0,0,0.15);
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.page-layout {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    padding: 10mm 15mm 10mm 15mm;
+}
+
+/* Left Main Content */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header/Top Area */
+.top-section {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.big-char-box {
+    width: 140px;
+    height: 140px;
+    border: 4px solid var(--grid-line-color);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 30px;
+    flex-shrink: 0;
+}
+
+/* Background Cross Dashed Lines */
+.big-char-grid-bg,
+.practice-grid-box-bg {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+}
+.big-char-grid-bg::before, .big-char-grid-bg::after,
+.practice-grid-box-bg::before, .practice-grid-box-bg::after {
+    content: '';
+    position: absolute;
+    opacity: 1.0;
+}
+/* Horizontal dashed */
+.big-char-grid-bg::before,
+.practice-grid-box-bg::before {
+    top: 50%; left: 0; right: 0; height: 2px;
+    transform: translateY(-50%);
+    background-image: repeating-linear-gradient(to right, transparent, transparent 4px, var(--grid-line-color) 4px, var(--grid-line-color) 6px);
+}
+/* Vertical dashed */
+.big-char-grid-bg::after,
+.practice-grid-box-bg::after {
+    left: 50%; top: 0; bottom: 0; width: 2px;
+    transform: translateX(-50%);
+    background-image: repeating-linear-gradient(to bottom, transparent, transparent 4px, var(--grid-line-color) 4px, var(--grid-line-color) 6px);
+}
+
+.big-char-box span#big-char {
+    font-size: 115px;
+    color: #FFC107; /* The large one in the example is yellow with an outline, let's keep it simple or orange */
+    z-index: 1;
+    line-height: 1;
+}
+
+.char-group {
+    display: flex;
+    flex-direction: column;
+    font-size: 32px;
+    color: #F57C00;
+    line-height: 1.2;
+    margin-top: 5px;
+    font-weight: 600;
+}
+
+.char-group span {
+    text-align: center;
+}
+
+.char-group span.highlighted {
+    display: inline-block;
+    width: 44px;
+    height: 44px;
+    line-height: 44px;
+    border-radius: 50%;
+    background-color: #FFCCBC;
+    border: 2px solid #333;
+    color: #D84315;
+}
+
+/* Practice Grids Wrapper */
+.practice-grids-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 15px;
+}
+
+/* Each Column Wrapper */
+.practice-grids-container {
+    display: flex;
+    gap: 15px; /* space between columns */
+    padding: 5px;
+    flex-direction: row-reverse; /* Japanese vertical writing goes Right to Left */
+    align-items: flex-start; /* Stop columns from stretching vertically */
+}
+
+/* A single practice column (vertical) */
+.practice-col {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid var(--grid-line-color);
+    height: max-content;
+}
+
+.practice-grid-box {
+    width: var(--grid-size);
+    height: var(--grid-size);
+    border-bottom: 2px solid var(--grid-line-color);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+.practice-grid-box:last-child {
+    border-bottom: none;
+}
+
+.practice-char {
+    font-size: 50px;
+    z-index: 1;
+    font-weight: 600;
+}
+.vertical-text {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+}
+.trace-sample { color: #c0c0c0; } /* Light grey for sample tracing */
+.trace-1 { color: #FFCDD2; } /* light pink/red */
+.trace-2 { color: #FFE082; } /* light yellow */
+.trace-3 { color: #B3E5FC; } /* light blue */
+.trace-empty { display: none; }
+
+/* Bottom Section */
+.bottom-section {
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.instruction {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.words-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 10px;
+    align-items: flex-start;
+    justify-content: space-around;
+    flex: 1;
+}
+
+.word-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.word-item img {
+    max-width: 100px;
+    max-height: 60px;
+    object-fit: contain;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    padding: 5px;
+    background: white;
+}
+
+.word-practice-area {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 5px;
+    align-items: flex-start;
+}
+.word-practice-row {
+    display: flex;
+    flex-direction: row;
+    border: 2px solid var(--grid-line-color);
+    width: max-content;
+}
+.word-practice-row .practice-grid-box {
+    border-bottom: none;
+    border-right: 2px solid var(--grid-line-color);
+}
+
+.sidebar {
+    width: 35mm;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 10px;
+}
+
+.title-vertical {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 5px;
+    border: 2px solid #5C94B3;
+    padding: 15px 5px;
+    color: #333;
+    height: 100%;
+}
+
+.name-box {
+    width: 80px;
+    height: 70%;
+    border: 2px solid #555;
+    align-self: flex-end;
+    display: flex;
+    flex-direction: column;
+}
+
+.name-label {
+    font-size: 14px;
+    padding: 5px;
+    text-align: center;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+}
+
+/* Modal */
+#camera-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+.camera-modal {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+}
+video#live-video {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 8px;
+    margin: 15px 0;
+    transform: scaleX(-1);
+}
+.camera-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+#cancel-camera-btn {
+    background-color: #9e9e9e;
+}
+
+/* Print Styles */
+@media print {
+    .no-print { display: none !important; }
+    body {
+        background: transparent;
+        margin: 0;
+        padding: 0;
+    }
+    .page.a4 {
+        margin: 0;
+        border: none;
+        box-shadow: none;
+        width: 100vw;
+        height: 100vh;
+        page-break-after: always;
+    }
+}

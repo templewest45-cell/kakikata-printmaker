@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ひらがな・カタカナ れんしゅうプリント作成ツール</title>
+    <!-- Use Google Fonts for textbook-like appearance -->
+    <link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Control Panel -->
+    <div id="control-panel" class="no-print">
+        <h1 class="app-title">✏️ もじれんしゅう<br>プリントメーカー</h1>
+        <h2>プリント設定</h2>
+        
+        <div class="control-group">
+            <label for="char-mode">文字の種類:</label>
+            <select id="char-mode">
+                <option value="hiragana" selected>ひらがな</option>
+                <option value="katakana">カタカナ</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label for="target-char-select" id="target-char-label">対象のひらがな:</label>
+            <select id="target-char-select"></select>
+        </div>
+        
+        <div class="control-group">
+            <label for="practice-cols">練習の列数 (最大5列):</label>
+            <input type="number" id="practice-cols" value="3" min="1" max="5">
+        </div>
+
+        <div class="control-group">
+            <label><input type="checkbox" id="show-sample" checked> グリッド内の見本文字（黒字）</label>
+        </div>
+        <div class="control-group">
+            <label><input type="checkbox" id="show-trace" checked> なぞり文字（薄い色の文字）</label>
+        </div>
+
+        <div class="control-group">
+            <label for="practice-direction">単語の練習方向:</label>
+            <select id="practice-direction">
+                <option value="vertical" selected>縦書き（上から下へ）</option>
+                <option value="horizontal">横書き（左から右へ）</option>
+            </select>
+        </div>
+        
+        <hr>
+        
+        <div class="word-group">
+            <h3>イラスト 1</h3>
+            <div class="control-group">
+                <label>単語を選択:</label>
+                <select id="word1-select"></select>
+                <input type="text" id="word1-custom" maxlength="6" placeholder="ひらがな6文字まで" style="display:none; margin-top:5px;">
+            </div>
+            <div class="control-group">
+                <label>画像 (アップロード):</label>
+                <input type="file" id="image1-upload" accept="image/*">
+            </div>
+            <div class="control-group">
+                <button class="camera-btn" data-target="1">📷 カメラで撮影</button>
+            </div>
+        </div>
+
+        <hr>
+        
+        <div class="word-group">
+            <h3>イラスト 2</h3>
+            <div class="control-group">
+                <label>単語を選択:</label>
+                <select id="word2-select"></select>
+                <input type="text" id="word2-custom" maxlength="6" placeholder="ひらがな6文字まで" style="display:none; margin-top:5px;">
+            </div>
+            <div class="control-group">
+                <label>画像 (アップロード):</label>
+                <input type="file" id="image2-upload" accept="image/*">
+            </div>
+            <div class="control-group">
+                <button class="camera-btn" data-target="2">📷 カメラで撮影</button>
+            </div>
+        </div>
+        
+        <button id="print-btn" onclick="window.print()">🖨️ プリントアウト（印刷）</button>
+        <button id="pdf-btn" onclick="exportPDF()">📄 PDFを作成</button>
+    </div>
+
+    <!-- Worksheet A4 Container -->
+    <div class="page a4" id="worksheet">
+        <div class="page-layout">
+            
+            <!-- Left Main Area -->
+            <div class="main-content">
+                <!-- Top Header: Big Character + Group -->
+                <div class="top-section">
+                    <div class="big-char-box">
+                        <div class="big-char-grid-bg"></div>
+                        <span id="big-char">あ</span>
+                    </div>
+                    <div class="char-group" id="char-group-display">
+                        <!-- Gen dynamic char group -->
+                    </div>
+                </div>
+                
+                <!-- Middle Practice Grids -->
+                <div class="practice-grids-wrapper">
+                    <!-- Dynamic -->
+                    <div class="practice-grids-container" id="practice-grids-container"></div>
+                </div>
+
+                <!-- Bottom Words Area -->
+                <div class="bottom-section">
+                    <div class="instruction">★こえにだして よみましょう。</div>
+                    <div class="words-container">
+                        <div class="word-item">
+                            <img id="word1-img" src="" alt="">
+                            <div class="word-practice-area" id="word1-practice"></div>
+                        </div>
+                        <div class="word-item">
+                            <img id="word2-img" src="" alt="">
+                            <div class="word-practice-area" id="word2-practice"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Sidebar Area -->
+            <div class="sidebar">
+                <div class="title-vertical" id="title-vertical">ひらがなをれんしゅうしましょう。</div>
+                <div class="name-box">
+                    <div class="name-label">なまえ</div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Camera Modal Overlay -->
+    <div id="camera-overlay" class="no-print" style="display:none;">
+        <div class="camera-modal">
+            <h3>写真を撮る</h3>
+            <video id="live-video" autoplay playsinline></video>
+            <div class="camera-controls">
+                <button id="capture-btn">📸 撮影する</button>
+                <button id="cancel-camera-btn">キャンセル</button>
+            </div>
+        </div>
+    </div>
+    
+    <canvas id="camera-canvas" style="display:none;"></canvas>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

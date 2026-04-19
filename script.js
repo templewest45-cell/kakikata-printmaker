@@ -395,6 +395,56 @@ function exportImage() {
     });
 }
 
+// 印刷（PNG画像を生成してから印刷）
+function printViaImage() {
+    let element = document.getElementById('worksheet');
+    let btn = document.getElementById('print-btn');
+    let originalText = btn.textContent;
+    btn.textContent = '⏳ 印刷準備中...';
+    btn.disabled = true;
+
+    html2canvas(element, {
+        scale: 3,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        width: element.offsetWidth,
+        height: element.offsetHeight,
+        windowWidth: element.offsetWidth,
+        windowHeight: element.offsetHeight
+    }).then(canvas => {
+        let dataUrl = canvas.toDataURL('image/png');
+
+        // 新しいウィンドウで画像を表示して印刷
+        let printWindow = window.open('', '_blank');
+        printWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>印刷プレビュー</title>
+                <style>
+                    * { margin: 0; padding: 0; }
+                    @page { size: A4 portrait; margin: 0; }
+                    body { display: flex; justify-content: center; align-items: flex-start; }
+                    img { width: 100%; height: auto; max-height: 100vh; object-fit: contain; }
+                </style>
+            </head>
+            <body>
+                <img src="${dataUrl}" onload="window.print(); window.close();" />
+            </body>
+            </html>
+        `);
+        printWindow.document.close();
+
+        btn.textContent = originalText;
+        btn.disabled = false;
+    }).catch(err => {
+        console.error('印刷エラー:', err);
+        alert('印刷の準備に失敗しました。もう一度お試しください。');
+        btn.textContent = originalText;
+        btn.disabled = false;
+    });
+}
 // ----------------------------------------------------
 // Image Upload Handlers
 // ----------------------------------------------------

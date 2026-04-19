@@ -431,8 +431,11 @@ video#live-video {
         margin: 0;
         border: none;
         box-shadow: none;
-        width: 100vw;
-        height: 100vh;
-        page-break-after: always;
+        width: 100%;
+        height: auto;
+        max-height: 100vh;
+        overflow: hidden;
+        page-break-inside: avoid;
+        page-break-after: avoid;
     }
 }

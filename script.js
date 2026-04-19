@@ -130,6 +130,10 @@ function updateWorksheet() {
             let box = document.createElement('div');
             box.className = 'practice-grid-box';
             let bg = document.createElement('div'); bg.className = 'practice-grid-box-bg';
+            let lineH = document.createElement('div'); lineH.className = 'grid-line-h';
+            let lineV = document.createElement('div'); lineV.className = 'grid-line-v';
+            bg.appendChild(lineH);
+            bg.appendChild(lineV);
             box.appendChild(bg);
             
             let charSpan = document.createElement('span');
@@ -257,6 +261,10 @@ function generateWordPractice(word, container) {
             let box = document.createElement('div');
             box.className = 'practice-grid-box word-grid-box';
             let bg = document.createElement('div'); bg.className = 'practice-grid-box-bg';
+            let lineH = document.createElement('div'); lineH.className = 'grid-line-h';
+            let lineV = document.createElement('div'); lineV.className = 'grid-line-v';
+            bg.appendChild(lineH);
+            bg.appendChild(lineV);
             box.appendChild(bg);
             
             let span = document.createElement('span');

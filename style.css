@@ -175,32 +175,34 @@ button:hover {
     flex-shrink: 0;
 }
 
-/* Background Cross Dashed Lines */
+/* Background Cross Dashed Lines - 実DOM要素を使用（html2canvas互換） */
 .big-char-grid-bg,
 .practice-grid-box-bg {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
     pointer-events: none;
 }
-.big-char-grid-bg::before, .big-char-grid-bg::after,
-.practice-grid-box-bg::before, .practice-grid-box-bg::after {
-    content: '';
+/* Horizontal dashed line */
+.grid-line-h {
     position: absolute;
-    opacity: 1.0;
-}
-/* Horizontal dashed */
-.big-char-grid-bg::before,
-.practice-grid-box-bg::before {
-    top: 50%; left: 0; right: 0; height: 2px;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 0;
+    border-top: 1.5px dashed var(--grid-line-color);
     transform: translateY(-50%);
-    background-image: repeating-linear-gradient(to right, transparent, transparent 4px, var(--grid-line-color) 4px, var(--grid-line-color) 6px);
+    pointer-events: none;
 }
-/* Vertical dashed */
-.big-char-grid-bg::after,
-.practice-grid-box-bg::after {
-    left: 50%; top: 0; bottom: 0; width: 2px;
+/* Vertical dashed line */
+.grid-line-v {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    border-left: 1.5px dashed var(--grid-line-color);
     transform: translateX(-50%);
-    background-image: repeating-linear-gradient(to bottom, transparent, transparent 4px, var(--grid-line-color) 4px, var(--grid-line-color) 6px);
+    pointer-events: none;
 }
 
 .big-char-box span#big-char {
@@ -278,10 +280,12 @@ button:hover {
     font-size: 50px;
     z-index: 1;
     font-weight: 600;
-}
-.vertical-text {
-    writing-mode: vertical-rl;
-    text-orientation: mixed;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 1;
+    text-align: center;
 }
 .trace-sample { color: #c0c0c0; } /* Light grey for sample tracing */
 .trace-1 { color: #FFCDD2; } /* light pink/red */

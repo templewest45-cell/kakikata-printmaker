@@ -85,7 +85,7 @@ function populateTargetChars() {
     label.textContent = getCurrentMode() === 'katakana' ? '対象のカタカナ:' : '対象のひらがな:';
     // Update sidebar title
     let titleEl = document.getElementById('title-vertical');
-    titleEl.textContent = getCurrentMode() === 'katakana' ? 'カタカナをれんしゅうしましょう。' : 'ひらがなをれんしゅうしましょう。';
+    titleEl.textContent = getCurrentMode() === 'katakana' ? 'カタカナをれんしゅうしましょう' : 'ひらがなをれんしゅうしましょう';
 }
 populateTargetChars();
 

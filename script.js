@@ -355,21 +355,11 @@ document.getElementById('char-mode').addEventListener('change', () => {
     populateWords();
 });
 
-// Image Export (PNG) - html2canvasでずれのない画像を生成
-function exportImage() {
+// 共通: ワークシートをCanvasにレンダリング
+function renderWorksheetToCanvas() {
     let element = document.getElementById('worksheet');
-    let target = targetCharSelect.value;
-    let mode = getCurrentMode() === 'katakana' ? 'カタカナ' : 'ひらがな';
-    let filename = mode + '_' + target + '_れんしゅう.png';
-
-    // ボタンを一時的に無効化
-    let btn = document.getElementById('pdf-btn');
-    let originalText = btn.textContent;
-    btn.textContent = '⏳ 画像を作成中...';
-    btn.disabled = true;
-
-    html2canvas(element, {
-        scale: 3,              // 高解像度（300dpi相当）
+    return html2canvas(element, {
+        scale: 3,
         useCORS: true,
         allowTaint: true,
         backgroundColor: '#ffffff',
@@ -378,13 +368,28 @@ function exportImage() {
         windowWidth: element.offsetWidth,
         windowHeight: element.offsetHeight
     }).then(canvas => {
-        // PNGとしてダウンロード
+        // toDataURLが成功するか確認（Tainted canvasチェック）
+        canvas.toDataURL('image/png');
+        return canvas;
+    });
+}
+
+// Image Export (PNG)
+function exportImage() {
+    let target = targetCharSelect.value;
+    let mode = getCurrentMode() === 'katakana' ? 'カタカナ' : 'ひらがな';
+    let filename = mode + '_' + target + '_れんしゅう.png';
+
+    let btn = document.getElementById('pdf-btn');
+    let originalText = btn.textContent;
+    btn.textContent = '⏳ 画像を作成中...';
+    btn.disabled = true;
+
+    renderWorksheetToCanvas().then(canvas => {
         let link = document.createElement('a');
         link.download = filename;
         link.href = canvas.toDataURL('image/png');
         link.click();
-
-        // ボタンを元に戻す
         btn.textContent = originalText;
         btn.disabled = false;
     }).catch(err => {
@@ -395,54 +400,47 @@ function exportImage() {
     });
 }
 
-// 印刷（PNG画像を生成してから印刷）
+// 印刷（PNG画像経由、失敗時はwindow.print()にフォールバック）
 function printViaImage() {
-    let element = document.getElementById('worksheet');
     let btn = document.getElementById('print-btn');
     let originalText = btn.textContent;
     btn.textContent = '⏳ 印刷準備中...';
     btn.disabled = true;
 
-    html2canvas(element, {
-        scale: 3,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: '#ffffff',
-        width: element.offsetWidth,
-        height: element.offsetHeight,
-        windowWidth: element.offsetWidth,
-        windowHeight: element.offsetHeight
-    }).then(canvas => {
+    renderWorksheetToCanvas().then(canvas => {
         let dataUrl = canvas.toDataURL('image/png');
 
-        // 新しいウィンドウで画像を表示して印刷
-        let printWindow = window.open('', '_blank');
-        printWindow.document.write(`
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>印刷プレビュー</title>
-                <style>
-                    * { margin: 0; padding: 0; }
-                    @page { size: A4 portrait; margin: 0; }
-                    body { display: flex; justify-content: center; align-items: flex-start; }
-                    img { width: 100%; height: auto; max-height: 100vh; object-fit: contain; }
-                </style>
-            </head>
-            <body>
-                <img src="${dataUrl}" onload="window.print(); window.close();" />
-            </body>
-            </html>
-        `);
-        printWindow.document.close();
+        // iframe方式で印刷（ポップアップブロッカー回避）
+        let iframe = document.createElement('iframe');
+        iframe.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:99999;border:none;opacity:0;';
+        document.body.appendChild(iframe);
+
+        let iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        iframeDoc.open();
+        iframeDoc.write(`<!DOCTYPE html><html><head><title>印刷</title>
+            <style>*{margin:0;padding:0}@page{size:A4 portrait;margin:0}body{width:100%;height:100%}img{width:100%;height:auto;display:block}</style>
+            </head><body><img src="${dataUrl}" /></body></html>`);
+        iframeDoc.close();
+
+        iframe.contentWindow.onafterprint = function() {
+            if (iframe.parentNode) document.body.removeChild(iframe);
+        };
+
+        setTimeout(() => {
+            iframe.contentWindow.focus();
+            iframe.contentWindow.print();
+            setTimeout(() => {
+                if (iframe.parentNode) document.body.removeChild(iframe);
+            }, 1000);
+        }, 500);
 
         btn.textContent = originalText;
         btn.disabled = false;
     }).catch(err => {
-        console.error('印刷エラー:', err);
-        alert('印刷の準備に失敗しました。もう一度お試しください。');
+        console.warn('画像生成失敗、通常印刷にフォールバック:', err);
         btn.textContent = originalText;
         btn.disabled = false;
+        window.print();
     });
 }
 // ----------------------------------------------------

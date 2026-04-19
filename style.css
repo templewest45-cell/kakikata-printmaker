@@ -421,19 +421,24 @@ video#live-video {
 
 /* Print Styles */
 @media print {
+    @page {
+        size: A4 portrait;
+        margin: 0;
+    }
     .no-print { display: none !important; }
     body {
         background: transparent;
         margin: 0;
         padding: 0;
+        width: 210mm;
+        height: 297mm;
     }
     .page.a4 {
         margin: 0;
         border: none;
         box-shadow: none;
-        width: 100%;
-        height: auto;
-        max-height: 100vh;
+        width: 210mm;
+        height: 297mm;
         overflow: hidden;
         page-break-inside: avoid;
         page-break-after: avoid;

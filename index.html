@@ -84,7 +84,7 @@
         </div>
         
         <button id="print-btn" onclick="window.print()">🖨️ プリントアウト（印刷）</button>
-        <button id="pdf-btn" onclick="exportPDF()">📄 PDFを作成</button>
+        <button id="pdf-btn" onclick="exportImage()">🖼️ 画像をダウンロード（PNG）</button>
     </div>
 
     <!-- Worksheet A4 Container -->
@@ -151,7 +151,7 @@
     
     <canvas id="camera-canvas" style="display:none;"></canvas>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="data.js"></script>
     <script src="script.js"></script>
 </body>

@@ -126,9 +126,9 @@ button:hover {
     font-size: 16px;
     font-weight: bold;
     padding: 15px;
-    background-color: #1976D2;
+    background-color: #388E3C;
 }
-#pdf-btn:hover { background-color: #1565C0; }
+#pdf-btn:hover { background-color: #2E7D32; }
 
 /* A4 Page Setup */
 .page.a4 {

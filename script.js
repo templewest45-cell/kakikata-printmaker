@@ -347,19 +347,44 @@ document.getElementById('char-mode').addEventListener('change', () => {
     populateWords();
 });
 
-// PDF Export
-function exportPDF() {
+// Image Export (PNG) - html2canvasでずれのない画像を生成
+function exportImage() {
     let element = document.getElementById('worksheet');
     let target = targetCharSelect.value;
     let mode = getCurrentMode() === 'katakana' ? 'カタカナ' : 'ひらがな';
-    let opt = {
-        margin:       0,
-        filename:     mode + '_' + target + '_れんしゅう.pdf',
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-    html2pdf().set(opt).from(element).save();
+    let filename = mode + '_' + target + '_れんしゅう.png';
+
+    // ボタンを一時的に無効化
+    let btn = document.getElementById('pdf-btn');
+    let originalText = btn.textContent;
+    btn.textContent = '⏳ 画像を作成中...';
+    btn.disabled = true;
+
+    html2canvas(element, {
+        scale: 3,              // 高解像度（300dpi相当）
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        width: element.offsetWidth,
+        height: element.offsetHeight,
+        windowWidth: element.offsetWidth,
+        windowHeight: element.offsetHeight
+    }).then(canvas => {
+        // PNGとしてダウンロード
+        let link = document.createElement('a');
+        link.download = filename;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+
+        // ボタンを元に戻す
+        btn.textContent = originalText;
+        btn.disabled = false;
+    }).catch(err => {
+        console.error('画像エクスポートエラー:', err);
+        alert('画像の作成に失敗しました。もう一度お試しください。');
+        btn.textContent = originalText;
+        btn.disabled = false;
+    });
 }
 
 // ----------------------------------------------------

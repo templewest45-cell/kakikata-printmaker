@@ -539,3 +539,25 @@ function stopCamera() {
     }
     cameraOverlay.style.display = 'none';
 }
+
+// ----------------------------------------------------
+// Mobile Settings Toggle
+// ----------------------------------------------------
+function toggleMobileSettings() {
+    const panel = document.getElementById('control-panel');
+    panel.classList.toggle('mobile-open');
+}
+
+// Show/hide mobile close button based on screen size
+function updateMobileUI() {
+    const closeBtn = document.getElementById('mobile-close-btn');
+    if (window.innerWidth <= 768) {
+        closeBtn.style.display = 'block';
+    } else {
+        closeBtn.style.display = 'none';
+        // Ensure panel is visible on desktop
+        document.getElementById('control-panel').classList.remove('mobile-open');
+    }
+}
+window.addEventListener('resize', updateMobileUI);
+updateMobileUI();

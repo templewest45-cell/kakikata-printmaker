@@ -9,8 +9,12 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Mobile Settings Toggle Button -->
+    <button id="mobile-settings-toggle" class="no-print" onclick="toggleMobileSettings()">⚙️</button>
+
     <!-- Control Panel -->
     <div id="control-panel" class="no-print">
+        <button id="mobile-close-btn" onclick="toggleMobileSettings()" style="display:none;">✕ 設定を閉じる</button>
         <h1 class="app-title">✏️ もじれんしゅう<br>プリントメーカー</h1>
         <h2>プリント設定</h2>
         

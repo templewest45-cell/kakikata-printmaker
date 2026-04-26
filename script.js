@@ -166,6 +166,12 @@ function updateWorksheet() {
             }
 
             box.appendChild(charSpan);
+
+            // Rotate prolonged sound mark for vertical text
+            if (target === 'ー' || target === 'ー') {
+                charSpan.classList.add('is-chouon');
+            }
+
             colDiv.appendChild(box);
         }
         practiceGridsContainer.appendChild(colDiv);
@@ -295,6 +301,12 @@ function generateWordPractice(word, container) {
             }
             span.className = spanClass;
             span.textContent = char;
+
+            // Rotate prolonged sound mark for vertical text
+            if (direction === 'vertical' && (char === 'ー' || char === 'ー')) {
+                span.classList.add('is-chouon');
+            }
+
             box.appendChild(span);
             group.appendChild(box);
         }
@@ -552,7 +564,7 @@ function toggleMobileSettings() {
 function updateMobileUI() {
     const closeBtn = document.getElementById('mobile-close-btn');
     const worksheet = document.getElementById('worksheet');
-    if (window.innerWidth <= 768) {
+    if (window.innerWidth <= 1100) {
         closeBtn.style.display = 'block';
         // Calculate scale to fit A4 worksheet in viewport
         const a4WidthPx = 210 * 3.7795275591; // 210mm in px (~793.7px)

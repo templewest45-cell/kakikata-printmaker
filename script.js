@@ -548,15 +548,24 @@ function toggleMobileSettings() {
     panel.classList.toggle('mobile-open');
 }
 
-// Show/hide mobile close button based on screen size
+// Show/hide mobile close button based on screen size & scale worksheet
 function updateMobileUI() {
     const closeBtn = document.getElementById('mobile-close-btn');
+    const worksheet = document.getElementById('worksheet');
     if (window.innerWidth <= 768) {
         closeBtn.style.display = 'block';
+        // Calculate scale to fit A4 worksheet in viewport
+        const a4WidthPx = 210 * 3.7795275591; // 210mm in px (~793.7px)
+        const padding = 20; // body padding
+        const availableWidth = window.innerWidth - padding;
+        const scale = Math.min(availableWidth / a4WidthPx, 1);
+        worksheet.style.setProperty('--mobile-scale', scale);
     } else {
         closeBtn.style.display = 'none';
         // Ensure panel is visible on desktop
         document.getElementById('control-panel').classList.remove('mobile-open');
+        // Reset scale
+        worksheet.style.removeProperty('--mobile-scale');
     }
 }
 window.addEventListener('resize', updateMobileUI);

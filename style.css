@@ -530,7 +530,7 @@ video#live-video {
 @media screen and (max-width: 768px) {
     body {
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start;
         padding: 10px;
     }
 
@@ -577,46 +577,14 @@ video#live-video {
     }
 
     .page.a4 {
-        width: 100%;
-        height: auto;
-        min-height: auto;
+        width: 210mm;
+        height: 297mm;
+        transform-origin: top left;
+        /* Scale is set dynamically via JS, fallback: */
+        transform: scale(var(--mobile-scale, 0.5));
         box-shadow: 0 0 8px rgba(0,0,0,0.1);
-        overflow: visible;
-    }
-
-    .page-layout {
-        padding: 5mm 8mm;
-        flex-direction: column;
-    }
-
-    .sidebar {
-        width: 100%;
-        flex-direction: row;
-        padding-left: 0;
-        padding-top: 10px;
-        gap: 10px;
-    }
-
-    .title-vertical {
-        writing-mode: horizontal-tb;
-        text-orientation: initial;
-        font-size: 16px;
-        letter-spacing: 2px;
-        padding: 8px 12px;
-        height: auto;
-        flex: 1;
-    }
-
-    .name-box {
-        width: auto;
-        height: 50px;
-        min-width: 120px;
-        flex-direction: row;
-    }
-
-    .name-label {
-        writing-mode: horizontal-tb;
-        text-orientation: initial;
+        overflow: hidden;
+        margin-bottom: calc(-297mm * (1 - var(--mobile-scale, 0.5)));
     }
 
     .practice-grids-container {
@@ -628,24 +596,3 @@ video#live-video {
     }
 }
 
-/* Very small screens */
-@media screen and (max-width: 400px) {
-    .big-char-box {
-        width: 100px;
-        height: 100px;
-        margin-right: 15px;
-    }
-
-    .big-char-box span#big-char {
-        font-size: 80px;
-    }
-
-    .char-group {
-        font-size: 24px;
-    }
-
-    .words-container {
-        flex-direction: column;
-        align-items: center;
-    }
-}

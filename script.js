@@ -69,6 +69,7 @@ const word2Rest = document.getElementById('word2-rest');
 const practiceDirectionSelect = document.getElementById('practice-direction');
 const word1Custom = document.getElementById('word1-custom');
 const word2Custom = document.getElementById('word2-custom');
+const gridSizeSelect = document.getElementById('grid-size');
 
 // Pre-fill select options dynamically
 function populateTargetChars() {
@@ -99,9 +100,18 @@ const BASE_ASSET_PATH = 'file:///' + 'C:/Users/templ/.gemini/antigravity/playgro
 // Initialize view
 function updateWorksheet() {
     let target = targetCharSelect.value;
+    // Grid size mode
+    let isLarge = gridSizeSelect.value === 'large';
+    let maxCols = isLarge ? 3 : 5;
+    practiceColsInput.max = maxCols;
+
     let cols = parseInt(practiceColsInput.value) || 3;
-    if (cols > 5) cols = 5;
+    if (cols > maxCols) cols = maxCols;
     if (cols < 1) cols = 1;
+    practiceColsInput.value = cols;
+
+    let worksheet = document.getElementById('worksheet');
+    worksheet.classList.toggle('large-grid', isLarge);
 
     // 1. Update big char
     bigCharDisplay.textContent = target;
@@ -121,7 +131,7 @@ function updateWorksheet() {
     // Let's create `cols` columns. Column goes Right to Left in vertical display usually, but `row-reverse` css handles visual order.
     // Box structure: 1st column: trace (trace-1, trace-2, trace-3, then empty if more rows). 
     // Wait, let's keep 4 rows per column.
-    const ROWS_PER_COL = 4;
+    const ROWS_PER_COL = isLarge ? 2 : 4;
     for (let c = 0; c < cols; c++) {
         let colDiv = document.createElement('div');
         colDiv.className = 'practice-col';
@@ -166,10 +176,17 @@ function populateWords() {
     let target = targetCharSelect.value;
     let data = getCurrentData();
     let options = data[target];
+    let isLarge = gridSizeSelect.value === 'large';
     
     // Clear selects
     word1Select.innerHTML = '';
     word2Select.innerHTML = '';
+
+    // Show/hide word2 section and control panel based on grid size
+    let word2Item = document.querySelectorAll('.word-item')[1];
+    let word2Group = document.querySelectorAll('.word-group')[1];
+    if (word2Item) word2Item.style.display = isLarge ? 'none' : '';
+    if (word2Group) word2Group.style.display = isLarge ? 'none' : '';
 
     if (options && options.length > 0) {
         options.forEach(opt => {
@@ -203,10 +220,14 @@ function populateWords() {
         word2Select.selectedIndex = idx2;
 
         updateWordDisplay(options[idx1], 1);
-        updateWordDisplay(options[idx2], 2);
+        if (!isLarge) {
+            updateWordDisplay(options[idx2], 2);
+        }
     } else {
         updateWordDisplay(null, 1);
-        updateWordDisplay(null, 2);
+        if (!isLarge) {
+            updateWordDisplay(null, 2);
+        }
     }
 }
 
@@ -336,6 +357,12 @@ document.getElementById('show-trace').addEventListener('change', () => {
 practiceDirectionSelect.addEventListener('change', () => {
     handleWordChange(1);
     handleWordChange(2);
+});
+
+gridSizeSelect.addEventListener('change', () => {
+    updateWorksheet();
+    populateWords();
+    handleWordChange(1);
 });
 
 word1Select.addEventListener('change', () => handleWordChange(1));

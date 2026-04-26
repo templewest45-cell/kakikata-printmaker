@@ -444,3 +444,54 @@ video#live-video {
         page-break-after: avoid;
     }
 }
+
+/* =============================================
+   Large Grid Mode
+   ============================================= */
+.large-grid {
+    --grid-size: 140px;
+}
+
+.large-grid .big-char-box {
+    width: 180px;
+    height: 180px;
+}
+
+.large-grid .big-char-box span#big-char {
+    font-size: 150px;
+}
+
+.large-grid .char-group {
+    font-size: 40px;
+}
+
+.large-grid .char-group span.highlighted {
+    width: 52px;
+    height: 52px;
+    line-height: 52px;
+}
+
+.large-grid .practice-char {
+    font-size: 100px;
+}
+
+.large-grid .bottom-section {
+    --grid-size: 90px;
+}
+
+.large-grid .bottom-section .practice-char {
+    font-size: 65px;
+}
+
+.large-grid .word-item img {
+    max-width: 140px;
+    max-height: 90px;
+}
+
+.large-grid .words-container {
+    justify-content: center;
+}
+
+.large-grid .instruction {
+    font-size: 20px;
+}

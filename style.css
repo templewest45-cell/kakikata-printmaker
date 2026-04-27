@@ -194,7 +194,7 @@ button:hover {
     right: 0;
     height: 0;
     border-top: 1.5px dashed var(--grid-line-color);
-    transform: translateY(-50%);
+    margin-top: -0.75px;
     pointer-events: none;
 }
 /* Vertical dashed line */
@@ -205,8 +205,30 @@ button:hover {
     bottom: 0;
     width: 0;
     border-left: 1.5px dashed var(--grid-line-color);
-    transform: translateX(-50%);
+    margin-left: -0.75px;
     pointer-events: none;
+}
+
+/* =============================================
+   Grid Style Toggles
+   ============================================= */
+.grid-style-box .grid-line-h,
+.grid-style-box .grid-line-v {
+    display: none !important;
+}
+
+.grid-style-none .grid-line-h,
+.grid-style-none .grid-line-v,
+.grid-style-none .practice-grid-box-bg {
+    display: none !important;
+}
+
+.grid-style-none .big-char-box,
+.grid-style-none .practice-col,
+.grid-style-none .practice-grid-box,
+.grid-style-none .word-practice-row,
+.grid-style-none .word-practice-row .practice-grid-box {
+    border: none !important;
 }
 
 .big-char-box span#big-char {

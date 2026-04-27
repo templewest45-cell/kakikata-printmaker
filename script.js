@@ -70,6 +70,7 @@ const practiceDirectionSelect = document.getElementById('practice-direction');
 const word1Custom = document.getElementById('word1-custom');
 const word2Custom = document.getElementById('word2-custom');
 const gridSizeSelect = document.getElementById('grid-size');
+const gridStyleSelect = document.getElementById('grid-style');
 
 // Pre-fill select options dynamically
 function populateTargetChars() {
@@ -113,6 +114,14 @@ function updateWorksheet() {
     let worksheet = document.getElementById('worksheet');
     worksheet.classList.toggle('large-grid', isLarge);
 
+    // Apply grid style
+    worksheet.classList.remove('grid-style-box', 'grid-style-none');
+    if (gridStyleSelect.value === 'box') {
+        worksheet.classList.add('grid-style-box');
+    } else if (gridStyleSelect.value === 'none') {
+        worksheet.classList.add('grid-style-none');
+    }
+
     // 1. Update big char
     bigCharDisplay.textContent = target;
 
@@ -154,13 +163,20 @@ function updateWorksheet() {
             let showTrace = document.getElementById('show-trace').checked;
             const tracesList = ['trace-1', 'trace-2', 'trace-3'];
 
+            let traceColsCount = parseInt(document.getElementById('trace-cols').value) || 0;
+
             if (c === 0 && showSample) {
                 // Entire first column is grey sample
                 charSpan.classList.add('trace-sample');
             } else if (showTrace) {
-                // Trace columns start from c=1 if sample is on, c=0 if sample is off
-                let traceColIdx = showSample ? c - 1 : c;
-                charSpan.classList.add(tracesList[traceColIdx % tracesList.length]);
+                // Determine if this column is within the allowed trace columns
+                let traceStart = showSample ? 1 : 0;
+                if (c >= traceStart && c < traceStart + traceColsCount) {
+                    let traceColIdx = c - traceStart;
+                    charSpan.classList.add(tracesList[traceColIdx % tracesList.length]);
+                } else {
+                    charSpan.classList.add('trace-empty'); // Beyond trace columns
+                }
             } else {
                 charSpan.classList.add('trace-empty');
             }
@@ -258,6 +274,7 @@ function generateWordPractice(word, container) {
 
     let showSample = document.getElementById('show-sample').checked;
     let showTrace = document.getElementById('show-trace').checked;
+    let traceColsCount = parseInt(document.getElementById('trace-cols').value) || 0;
     let direction = practiceDirectionSelect.value;
     
     // Hardcode 3 rows/cols for word practicing
@@ -268,7 +285,7 @@ function generateWordPractice(word, container) {
     
     let traceIdx = 0;
     while (groupsToCreate.length < WORD_PRACTICE_COUNT) {
-        if (showTrace) {
+        if (showTrace && traceIdx < traceColsCount) {
             groupsToCreate.push(traceIdx === 0 ? 'trace-1' : traceIdx === 1 ? 'trace-2' : 'trace-3');
             traceIdx++;
         } else {
@@ -365,6 +382,11 @@ document.getElementById('show-trace').addEventListener('change', () => {
     handleWordChange(1);
     handleWordChange(2);
 });
+document.getElementById('trace-cols').addEventListener('input', () => {
+    updateWorksheet();
+    handleWordChange(1);
+    handleWordChange(2);
+});
 
 practiceDirectionSelect.addEventListener('change', () => {
     handleWordChange(1);
@@ -375,6 +397,10 @@ gridSizeSelect.addEventListener('change', () => {
     updateWorksheet();
     populateWords();
     handleWordChange(1);
+});
+
+gridStyleSelect.addEventListener('change', () => {
+    updateWorksheet();
 });
 
 word1Select.addEventListener('change', () => handleWordChange(1));

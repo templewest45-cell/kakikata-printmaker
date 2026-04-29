@@ -104,7 +104,17 @@ function updateWorksheet() {
     // Grid size mode
     let isLarge = gridSizeSelect.value === 'large';
     let maxCols = isLarge ? 3 : 5;
-    practiceColsInput.max = maxCols;
+
+    Array.from(practiceColsInput.options).forEach(opt => {
+        let val = parseInt(opt.value);
+        if (val > maxCols) {
+            opt.disabled = true;
+            opt.style.display = 'none';
+        } else {
+            opt.disabled = false;
+            opt.style.display = '';
+        }
+    });
 
     let cols = parseInt(practiceColsInput.value) || 3;
     if (cols > maxCols) cols = maxCols;
@@ -369,7 +379,7 @@ targetCharSelect.addEventListener('change', () => {
     populateWords();
 });
 
-practiceColsInput.addEventListener('input', updateWorksheet);
+practiceColsInput.addEventListener('change', updateWorksheet);
 document.getElementById('show-sample').addEventListener('change', () => {
     updateWorksheet();
     handleWordChange(1);

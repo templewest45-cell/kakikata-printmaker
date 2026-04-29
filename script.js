@@ -116,10 +116,8 @@ function updateWorksheet() {
 
     // Apply grid style
     worksheet.classList.remove('grid-style-box', 'grid-style-none');
-    if (gridStyleSelect.value === 'box') {
+    if (!gridStyleSelect.checked) {
         worksheet.classList.add('grid-style-box');
-    } else if (gridStyleSelect.value === 'none') {
-        worksheet.classList.add('grid-style-none');
     }
 
     // 1. Update big char

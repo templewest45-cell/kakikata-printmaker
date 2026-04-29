@@ -382,7 +382,7 @@ document.getElementById('show-trace').addEventListener('change', () => {
     handleWordChange(1);
     handleWordChange(2);
 });
-document.getElementById('trace-cols').addEventListener('input', () => {
+document.getElementById('trace-cols').addEventListener('change', () => {
     updateWorksheet();
     handleWordChange(1);
     handleWordChange(2);

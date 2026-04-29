@@ -313,10 +313,10 @@ button:hover {
     line-height: 1;
     text-align: center;
 }
-.trace-sample { color: #c0c0c0; } /* Light grey for sample tracing */
-.trace-1 { color: #FFCDD2; } /* light pink/red */
-.trace-2 { color: #FFE082; } /* light yellow */
-.trace-3 { color: #B3E5FC; } /* light blue */
+.trace-sample { color: var(--text-color); } /* Black for sample */
+.trace-1 { color: #c0c0c0; } /* light grey */
+.trace-2 { color: #c0c0c0; } /* light grey */
+.trace-3 { color: #c0c0c0; } /* light grey */
 .trace-empty { display: none; }
 
 /* Vertical text: rotate prolonged sound mark (ー) for vertical writing */

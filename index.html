@@ -59,7 +59,13 @@
         <div class="control-group" style="display: flex; align-items: center; justify-content: space-between;">
             <label style="margin-bottom: 0;"><input type="checkbox" id="show-trace" checked> なぞり文字（薄い色）</label>
             <div>
-                <input type="number" id="trace-cols" value="2" min="1" max="5" style="width: 50px; padding: 4px; border: 1px solid #ccc; border-radius: 4px; margin-right: 5px;">行(列)
+                <select id="trace-cols" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; margin-right: 5px;">
+                    <option value="1">1</option>
+                    <option value="2" selected>2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>行(列)
             </div>
         </div>
 
